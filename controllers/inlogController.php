@@ -15,21 +15,19 @@ if (empty($_POST['password'])) {
     $password = sha1($_POST['password']);
 }
 include "../config.php";
-
+require_once '../classes/User.php';
 if(empty($errors)){
     $opdracht = "SELECT * FROM `user` WHERE email = '$email' AND password = '$password'";
-
-    $resultaat = mysqli_query($mysqli, $opdracht);
-
-    if (mysqli_num_rows($resultaat) > 0) {
-
-        $user = mysqli_fetch_array($resultaat);
-
+    $userQuery = $connection->prepare($opdracht);
+    $userQuery->setFetchMode(PDO::FETCH_CLASS, '\\Classes\\User');
+    $userQuery->execute();
+    $user = $userQuery->fetch();
+    if ($user) {
         $data['success'] = true;
         session_start();
-        $_SESSION['Email'] = $user['email'];
-        $_SESSION['UserId'] = $user['id'];
-        $_SESSION['Level'] = $user['level'];
+        $_SESSION['Email'] = $user->email;
+        $_SESSION['UserId'] = $user->id;
+        $_SESSION['Level'] = $user->level;
         echo json_encode($data);
     } else {
         $data['success'] = false;

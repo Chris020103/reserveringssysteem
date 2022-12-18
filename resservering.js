@@ -24,10 +24,10 @@
     let newdiv = document.createElement("button");
     newdiv.setAttribute("class", "btn btn-primary");
     newdiv.setAttribute("type", "button");
-    newdiv.setAttribute('id', item.ID)
+    newdiv.setAttribute('id', item.id)
     newdiv.setAttribute("style", "margin-left: 5px;");
     newdiv.setAttribute('onclick','makeReservation();'); // for FF
-    newdiv.onclick = function() {makeReservation(item.ID, myCalender.value.toLocaleDateString());}; // for IE
+    newdiv.onclick = function() {makeReservation(item.id, myCalender.value.toLocaleDateString());}; // for IE
     newdiv.innerHTML = item.TimeStamp;
     currentToDateString.appendChild(newdiv)
 }
@@ -53,10 +53,10 @@
                     let newdiv = document.createElement("button");
                     newdiv.setAttribute("class", "btn btn-primary");
                     newdiv.setAttribute("type", "button");
-                    newdiv.setAttribute('id', item.ID)
+                    newdiv.setAttribute('id', item.id)
                     newdiv.setAttribute("style", "margin-left: 5px;");
                     newdiv.setAttribute('onclick','makeReservation();'); // for FF
-                    newdiv.onclick = function() {makeReservation(item.ID, myCalender.value.toLocaleDateString());}; // for IE
+                    newdiv.onclick = function() {makeReservation(item.id, myCalender.value.toLocaleDateString());}; // for IE
                     newdiv.innerHTML = item.TimeStamp;
                     currentToDateString.appendChild(newdiv)
                 }

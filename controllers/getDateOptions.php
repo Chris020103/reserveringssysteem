@@ -1,6 +1,7 @@
 <?php
     include "../config.php";
-
+    require "../classes/DateOptions.php";
+    require "../classes/Reservation.php";
     $date = $_GET['date'];
 
     $newDate = date('Y-m-d', strtotime($date));
@@ -9,37 +10,28 @@
 
     $query = "SELECT * FROM `reservations` WHERE date = " . " ' " .  $newDate . " ' ";
 
-    $resultStandardTimeStamps = mysqli_query($mysqli, $queryStandardTimeStamps);
-
-    $resultReservations = mysqli_query($mysqli, $query);
+    $resultStandardTimeStamps = $connection->query($queryStandardTimeStamps)->fetchAll(PDO::FETCH_CLASS, '\\Classes\\DateOptions');
+    $resultReservations = $connection->query($query)->fetchAll();
 
     $resultsArray[] = [];
 
     $rowsStandardTimeStamps = array();
     $rowsReservedTimeStamps = array();
+    foreach($resultReservations as $reservation){
 
-    while ($row = mysqli_fetch_array($resultStandardTimeStamps)) {
-            $rowsStandardTimeStamps[] = $row;
-
+        $rowsReservedTimeStamps[$reservation['date_id']] = $reservation;
     }
-    while ($reservation = mysqli_fetch_array($resultReservations)) {
-        $rowsReservedTimeStamps[] = $reservation['date_id'];
-    }
-    foreach($rowsStandardTimeStamps as $row)
+    foreach($resultStandardTimeStamps as $row)
     {
-        if($rowsReservedTimeStamps != null || $rowsReservedTimeStamps != [] || !empty($rowsReservedTimeStamps)){
-                if(!in_array($row['ID'] ,$rowsReservedTimeStamps) ){
-                        $object = (object) [
-                            'ID' => $row['ID'],
-                            'TimeStamp' => $row['Timestamp'],
-                        ];
-                        $resultsArray[] = $object;
-                }
+        if($resultReservations != null || $resultReservations != []){
+            if(!array_key_exists($row->ID, $rowsReservedTimeStamps)){
+                $resultsArray[] = $row;
+            }
         }
         if(empty($rowsReservedTimeStamps)){
             $object = (object) [
-                'ID' => $row['ID'],
-                'TimeStamp' => $row['Timestamp'],
+                'id' => $row->id,
+                'Timestamp' => $row->Timestamp,
             ];
             $resultsArray[] = $object;
         }

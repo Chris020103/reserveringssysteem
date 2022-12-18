@@ -1,3 +1,14 @@
+<?php
+require_once "../config.php";
+session_start();
+if($_SESSION !== []){
+    if($_SESSION['Level'] === '1'){
+        header ("location: /reserveringssysteem/admin/overview");
+    }
+}
+
+?>
+
 <!doctype html>
 <html lang="nl">
 <head>
@@ -21,11 +32,11 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Inloggen</h5>
+                    <h5 class="modal-title col-md-12" id="exampleModalLabel">Inloggen</h5>
             </div>
             <div class="modal-body">
                 <div id="showcase-wrapper">
@@ -41,15 +52,8 @@
                             <label class="form-label" for="password">Password</label>
                             <input type="password" name="password" id="password" class="form-control" />
                         </div>
-
                         <button type="submit" class="btn btn-primary btn-block col-md-12">Sign in</button>
-
-                        <!-- Register buttons -->
-                        <div class="text-center">
-                            <p>Not a member? <a href="/reserveringssysteem/register">Register</a></p>
-                        </div>
-                        <div id="fault">
-                        </div>
+                        <div id="fault" class="col-md-12">
                     </form>
                 </div>
             </div>
@@ -64,15 +68,15 @@
 </script>
 <script>
 
-     $('form').submit(function (event)  {
-         event.preventDefault();
-         let formData = {
+    $('form').submit(function (event)  {
+        event.preventDefault();
+        let formData = {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value
         };
         $.ajax({
             type: 'POST',
-            url: '/reserveringssysteem/controllers/inlogController.php',
+            url: '/reserveringssysteem/admin/controllers/inlogController.php',
             data: formData,
             dataType: "json",
             encode: true,
@@ -90,12 +94,12 @@
                 newdiv.innerHTML = "U bent succesvol ingelogd! U wordt over 3 seconden doorverwezen.";
                 document.getElementById('fault').appendChild(newdiv);
                 setTimeout(function(){
-                    window.location.href = '/reserveringssysteem/';
+                    window.location.href = '/reserveringssysteem/admin/overview';
                 }, 3000);
             }
         })
 
-     });
+    });
 </script>
 
 </body>

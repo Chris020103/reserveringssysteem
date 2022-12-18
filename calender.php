@@ -74,8 +74,3 @@ class Calendar {
 }
 ?>
 
-<script>
-    const handleOnClick = (date) => {
-        console.log("hallo");
-    }
-</script>

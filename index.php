@@ -17,7 +17,7 @@
     <style>
         .header{
             background-image: url("./assets/img/mazdaLogo.png");
-            background-size: contain;
+            background-size: cover;
             background-repeat: no-repeat;
             height: 200px;
         }
@@ -26,10 +26,10 @@
 <body>
 
     <div class="container-fluid p-0">
-        <?php
-        require_once "./components/navbar.php";
-        ?>
-        <div class=" row align-items-center align-middle main-div">
+<!--        --><?php
+//        require_once "./components/navbar.php";
+//        ?>
+        <div class="row h-100 align-items-center align-middle first-row main-div">
             <div class="col-md-6 main-div text-center">
                 <h1 class="text-white">De Mazda CX-60</h1>
                 <h2 class="text-white">Reserveer hieronder voor een proefrit met de nieuwste Mazda CX-60</h2>
@@ -39,7 +39,12 @@
                 </button>
             </div>
         </div>
+        <div class="row blocks">
+            <div class="col-md-6" style="border-right: 1px solid lightgray"></div>
+            <div class="col-md-6"></div>
+        </div>
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -110,14 +115,14 @@
                 data = JSON.parse(data);
                 data.forEach((item, index)=>{
                     if(!Array.isArray(item)){
-                            let newdiv = document.createElement("button");
+                        let newdiv = document.createElement("button");
                             newdiv.setAttribute("class", "btn btn-primary");
                             newdiv.setAttribute("type", "button");
-                            newdiv.setAttribute('id', item.ID)
+                            newdiv.setAttribute('id', item.id)
                             newdiv.setAttribute("style", "margin-left: 5px;");
                             newdiv.setAttribute('onclick','makeReservation();'); // for FF
-                            newdiv.onclick = function() {makeReservation(item.ID, myCalender.value.toLocaleDateString());}; // for IE
-                            newdiv.innerHTML = item.TimeStamp;
+                            newdiv.onclick = function() {makeReservation(item.id, myCalender.value.toLocaleDateString());}; // for IE
+                            newdiv.innerHTML = item.Timestamp;
                             currentToDateString.appendChild(newdiv)
                     }
                 })
@@ -142,11 +147,11 @@
                                 let newdiv = document.createElement("button");
                                 newdiv.setAttribute("class", "btn btn-primary");
                                 newdiv.setAttribute("type", "button");
-                                newdiv.setAttribute('id', item.ID)
+                                newdiv.setAttribute('id', item.id)
                                 newdiv.setAttribute("style", "margin-left: 5px;");
                                 newdiv.setAttribute('onclick','makeReservation();'); // for FF
-                                newdiv.onclick = function() {makeReservation(item.ID, myCalender.value.toLocaleDateString());}; // for IE
-                                newdiv.innerHTML = item.TimeStamp;
+                                newdiv.onclick = function() {makeReservation(item.id, myCalender.value.toLocaleDateString());}; // for IE
+                                newdiv.innerHTML = item.Timestamp;
                                 currentToDateString.appendChild(newdiv)
                         }
                     })

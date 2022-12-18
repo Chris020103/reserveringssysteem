@@ -1,25 +1,29 @@
 <?php
     include "../config.php";
+    require_once "../classes/User.php";
+    require_once "../classes/DateOptions.php";
     session_start();
 
     if(!$_SESSION['Email']){
         header( "Location: /reserveringssysteem/login" );
     }
-    $getTimestamp = "SELECT * FROM `standardDateOptions` WHERE ID =" . $_GET['id'];
+    //Timestamp info
+    $getTimestamp = "SELECT * FROM `standardDateOptions` WHERE id =" . $_GET['id'];
+    $timeStampInfo = $connection->prepare($getTimestamp);
+    $timeStampInfo->setFetchMode(PDO::FETCH_CLASS, '\\Classes\\DateOptions');
+    $timeStampInfo->execute();
+    $timeStamp = $timeStampInfo->fetch();
 
+    //Userinfo
     $getUserInfo = "SELECT * FROM `user` WHERE id =" . $_SESSION['UserId'];
+    $userInfoResult = $connection->prepare($getUserInfo);
+    $userInfoResult->setFetchMode(PDO::FETCH_CLASS, '\\Classes\\User');
+    $userInfoResult->execute();
+    $user = $userInfoResult->fetch();
 
-    $userInfoResult = mysqli_query($mysqli, $getUserInfo);
-    $getTimeStampInfo = mysqli_query($mysqli, $getTimestamp);
-
-    if (mysqli_num_rows($getTimeStampInfo) > 0) {
-        $timeStamp = mysqli_fetch_array($getTimeStampInfo);
-    }
-
-    if (mysqli_num_rows($userInfoResult) > 0) {
-        $user = mysqli_fetch_array($userInfoResult);
-    }
     $date = $_GET['date'];
+
+
 ?>
 
 <!doctype html>
@@ -49,8 +53,8 @@
     </style>
 </head>
 <body>
-<div class="container" >
-    <div class="row h-100 align-items-center main-div">
+<div class="container-fluid" >
+    <div class="row h-100 align-items-center main-div first-row">
         <div class="col-md-6 main-div" style="background-color: white; border-radius: 10px;">
             <div class="row justify-content-center">
                 <div class="col-md-5  header">
@@ -61,16 +65,16 @@
             </div>
             <hr class="col-md-12">
             <div class="row">
-                <h3 class="col-md-3">Datum:</h3><p class="col-md-8"><?php echo $_GET['date'] ?></p>
+                <h3 class="col-md-3">Datum:</h3><p class="col-md-8"><?= $_GET['date'] ?></p>
             </div>
             <div class="row">
-                <h4 class="col-md-3">Tijdsvak:</h4><p class="col-md-8"> <?php echo $timeStamp['Timestamp'] ?></p>
+                <h4 class="col-md-3">Tijdsvak:</h4><p class="col-md-8"> <?= $timeStamp->Timestamp ?></p>
             </div>
             <div class="row">
-                <h4 class="col-md-3">Naam:</h4><p class="col-md-8"> <?php echo $user['firstName'] . " " .  $user['middleName'] . " " . $user['lastName']?></p>
+                <h4 class="col-md-3">Naam:</h4><p class="col-md-8"> <?= $user->firstName . " " .  $user->middleName . " " . $user->lastName?></p>
             </div>
             <div class="row">
-                <h4 class="col-md-3">Email:</h4><p class="col-md-8"><?php echo $user['email']?></p>
+                <h4 class="col-md-3">Email:</h4><p class="col-md-8"><?= $user->email ?></p>
             </div>
             <div style="position: relative" class="col-md-12" id="message">
             </div>
@@ -78,7 +82,7 @@
                 <hr class="col-md-12"/>
             </div>
             <form method="post">
-                <input type="hidden" value="<?php echo $date ?>" id="date">
+                <input type="hidden" value="<?= $date ?>" id="date">
 
                 <div class="form-group">
                     <label for="remark">Voeg hier een opmerking toe:</label>
@@ -109,7 +113,6 @@
             dataType: "json",
             encode: true
         }).done(function (data) {
-            console.log(data.errors);
                 if(!data.success){
                     let newdiv = document.createElement("div");
                     newdiv.setAttribute("class", "alert alert-danger");

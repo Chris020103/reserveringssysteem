@@ -1,9 +1,15 @@
 body{
     height: 100vh;
+    display: flex;
+}
+.first-row{
     background-image: url("../img/Mazda-cx-60.webp");
     background-size: cover;
     background-repeat: no-repeat;
-    display: flex;
+}
+.blocks{
+    background-color: gray;
+    height: 200px;
 }
 
 .main-div{
@@ -109,3 +115,4 @@ body{
 .navbar-text a{
     color: white;
 }
+
